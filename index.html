@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Surat Izin</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+        
+        .preview-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #667eea;
+        }
+        
+        .file-input-label:hover {
+            background: #e8eaf6;
+        }
+        
+        .file-input-label.has-file {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-print {
+            background: #4caf50;
+        }
+        
+        /* SURAT PREVIEW */
+        .surat {
+            background: #fffef0;
+            padding: 50px;
+            font-family: 'Kalam', cursive;
+            font-size: 18px;
+            line-height: 2;
+            min-height: 700px;
+        }
+        
+        .kanan {
+            margin-left: auto;
+            width: fit-content;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .kiri {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .paragraf {
+            text-indent: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .ttd {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .garis {
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ttd-image {
+            max-height:150px;
+            max-width: 300px;
+            object-fit: contain;
+        }
+        
+        .nama {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .form-section {
+                display: none;
+            }
+            .preview-section {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+        
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- FORM -->
+        <div class="form-section">
+            <h1>📝 Form Surat Izin</h1>
+            
+            <div class="form-group">
+                <label>Kota</label>
+                <input type="text" id="kota" value="Sampang">
+            </div>
+            
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="tanggal">
+            </div>
+            
+            <div class="form-group">
+                <label>Ditujukan Kepada</label>
+                <input type="text" id="tujuan" value="Ibu Kepala Sekolah">
+            </div>
+            
+            <div class="form-group">
+                <label>Instansi</label>
+                <input type="text" id="instansi" value="SMP Negeri 6 Sampang">
+            </div>
+            
+            <div class="form-group">
+                <label>Keterangan</label>
+                <select id="keterangan">
+                    <option value="sakit">Sakit</option>
+                    <option value="ijin">Ijin</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Nama Pengirim</label>
+                <input type="text" id="nama" value="Cahyani">
+            </div>
+            
+            <div class="form-group">
+                <label>Upload Tanda Tangan</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="ttd" accept="image/*">
+                    <label for="ttd" class="file-input-label" id="ttd-label">
+                        📎 Klik untuk upload tanda tangan
+                    </label>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="updateSurat()">🔄 Perbarui Surat</button>
+            <button class="btn btn-print" onclick="window.print()">🖨️ Cetak Surat</button>
+        </div>
+        
+        <!-- PREVIEW -->
+        <div class="preview-section">
+            <div class="surat" id="surat">
+                <div class="kanan">
+                    <span id="prev-kota">Sampang</span>, <span id="prev-tanggal">6 Mei 2026</span><br><br>
+                    
+                    Kepada Yth :<br>
+                    <span id="prev-tujuan">Ibu Kepala Sekolah</span><br>
+                    <span id="prev-instansi">SMP Negeri 6 Sampang</span><br>
+                    di-<br>
+                    Tempat.
+                </div>
+                
+                <div class="kiri">
+                    Assalamu'alaikum Wr. Wb
+                </div>
+                
+                <div class="kanan">
+                    <div class="paragraf">
+                        Dengan ini saya memberitahukan bahwa pada hari ini saya tidak dapat berdinas sebagaimana mestinya di karenakan <span id="prev-ket">terganggu (SAKIT)</span>.
+                    </div>
+                    
+                    Demikian pemberitahuan ini, atas ijin yang ibu berikan saya sampaikan terima kasih.<br><br>
+                    
+                    Wassalamu'alaikum Wr. Wb
+                </div>
+                
+                <div class="kanan">
+                    <div class="ttd">
+                        Hormat saya,<br>
+                        <div class="garis" id="tempat-ttd"></div>
+                        <span class="nama" id="prev-nama">Cahyani</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set tanggal hari ini
+        document.getElementById('tanggal').valueAsDate = new Date();
+        
+        // File handler
+        document.getElementById('ttd').addEventListener('change', function(e) {
+            const label = document.getElementById('ttd-label');
+            if (e.target.files && e.target.files[0]) {
+                label.textContent = '✅ ' + e.target.files[0].name;
+                label.classList.add('has-file');
+            }
+        });
+        
+        function formatTanggal(dateStr) {
+            const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                          'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const d = new Date(dateStr);
+            return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+        }
+        
+        function updateSurat() {
+            const kota = document.getElementById('kota').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const tujuan = document.getElementById('tujuan').value;
+            const instansi = document.getElementById('instansi').value;
+            const keterangan = document.getElementById('keterangan').value;
+            const nama = document.getElementById('nama').value;
+            const ttdFile = document.getElementById('ttd').files[0];
+            
+            document.getElementById('prev-kota').textContent = kota || '...........';
+            document.getElementById('prev-tanggal').textContent = tanggal ? formatTanggal(tanggal) : '...........';
+            document.getElementById('prev-tujuan').textContent = tujuan || '...........';
+            document.getElementById('prev-instansi').textContent = instansi || '...........';
+            document.getElementById('prev-nama').textContent = nama || '...........';
+            
+            const ketText = keterangan === 'sakit' ? 'terganggu (SAKIT)' : 'ijin';
+            document.getElementById('prev-ket').textContent = ketText;
+            
+            // TTD
+            const tempatTtd = document.getElementById('tempat-ttd');
+            tempatTtd.innerHTML = '';
+            
+            if (ttdFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'ttd-image';
+                    tempatTtd.appendChild(img);
+                };
+                reader.readAsDataURL(ttdFile);
+            }
+        }
+        
+        // Auto update
+        document.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', updateSurat);
+        });
+        
+        updateSurat();
+    </script>
+</body>
+</html>
